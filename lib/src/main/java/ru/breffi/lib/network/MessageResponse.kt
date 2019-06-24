@@ -3,7 +3,7 @@ package ru.breffi.lib.network
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class SmallMessageResponse(
+data class MessageResponse(
     @SerializedName("Path") @Expose val path: String,
     @SerializedName("Topic") @Expose val topic: String,
     @SerializedName("Metadata") @Expose val metadata: Metadata,
