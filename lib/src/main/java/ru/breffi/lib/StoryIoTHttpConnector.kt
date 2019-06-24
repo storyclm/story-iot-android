@@ -9,10 +9,7 @@ import io.reactivex.Observable
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import ru.breffi.lib.models.StoryMessage
-import ru.breffi.lib.network.Communicator
-import ru.breffi.lib.network.MessageResponse
-import ru.breffi.lib.network.NetworkUtil
-import ru.breffi.lib.network.StoryIoTService
+import ru.breffi.lib.network.*
 import java.io.File
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
@@ -95,9 +92,65 @@ class StoryIoTHttpConnector(var context: Context? = null) {
             }
     }
 
+    fun getFeed(token: String?, direction: String, size: Int): Observable<FeedResponse> {
+        return storyIoTService.getFeed(
+            hub,
+            key,
+            expiration,
+            Signature.create(key, expiration),
+            token,
+            direction,
+            size
+        )
+            .map { messageResponse ->
+                FeedResponse(
+                    messageResponse.body(),
+                    messageResponse.headers().get("Cursor-Position")
+                )
+            }
+    }
+
+    fun getMessage(id: String?): Observable<MessageResponse> {
+        return storyIoTService.getStorageMessage(
+            hub,
+            id,
+            key,
+            expiration,
+            Signature.create(key, expiration)
+        )
+    }
+
+    fun updateMetadataMessage(metaName: String, metaValue: String, id: String): Observable<MessageResponse> {
+        return storyIoTService.updateMetadataMessage(
+            hub,
+            id,
+            metaName,
+            key,
+            expiration,
+            Signature.create(key, expiration),
+            buildBody(metaValue)
+        )
+    }
+
+    fun deleteMetadataMessage(metaName: String, id: String): Observable<MessageResponse> {
+        return storyIoTService.deleteMetadataMessage(
+            hub,
+            id,
+            metaName,
+            key,
+            expiration,
+            Signature.create(key, expiration)
+        )
+    }
+
     private fun buildBody(smallMessage: StoryMessage): RequestBody {
         val utf = MediaType.parse("text/plain; charset=utf-8")
         return RequestBody.create(utf, gson.toJson(smallMessage.body))
+    }
+
+    private fun buildBody(any: Any): RequestBody {
+        val utf = MediaType.parse("text/plain; charset=utf-8")
+        return RequestBody.create(utf, any.toString())
     }
 
     private fun buildLargeBody(any: Any?): RequestBody {

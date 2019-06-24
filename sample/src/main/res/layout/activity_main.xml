@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+android:gravity="center">
 
     <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:id="@+id/smallMessageButton"
-            android:text="Test small message" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"/>
+            android:text="Test small message"
+            android:layout_margin="8dp"/>
 
     <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:id="@+id/largeMessageButton"
-            android:text="Test large message" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="8dp"
-            app:layout_constraintHorizontal_bias="0.493" app:layout_constraintVertical_bias="0.043"
-            app:layout_constraintTop_toBottomOf="@+id/smallMessageButton"/>
+            android:text="Test large message"
+            android:layout_margin="8dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/feedButton"
+            android:text="Get feed"
+            android:layout_margin="8dp"/>
+
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/getMessageButton"
+            android:text="Get message"
+            android:layout_margin="8dp"/>
+
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/updateMessageButton"
+            android:text="Update message metadata"
+            android:layout_margin="8dp"/>
+
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/deleteMessageButton"
+            android:text="Delete message metadata"
+            android:layout_margin="8dp"/>
+
+</LinearLayout>

@@ -13,10 +13,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.breffi.lib.StoryIoTHttpConnector
+import ru.breffi.lib.StoryParams
 import ru.breffi.lib.models.Body
 import ru.breffi.lib.models.StoryMessage
+import ru.breffi.lib.network.FeedResponse
 import ru.breffi.lib.network.MessageResponse
 import java.io.File
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,6 +50,52 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, " Small message failure", Toast.LENGTH_SHORT).show()
                 })
         }
+        feedButton.setOnClickListener { storyIoTHttpConnector.getFeed("", StoryParams.DIRECTION_FORWARD, 10)
+            .flatMap { response ->
+                Log.e(StoryIoTHttpConnector.TAG, "get feed token 1 = ${response.token}")
+                storyIoTHttpConnector.getFeed(response.token, StoryParams.DIRECTION_FORWARD, 10) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ feedResponse: FeedResponse? ->
+                Log.e(StoryIoTHttpConnector.TAG, "get feed token 2 = ${feedResponse?.token}")
+                Toast.makeText(this, "Get feed success", Toast.LENGTH_SHORT).show()
+            }, { t ->
+                t.printStackTrace()
+                Toast.makeText(this, "Get feed failure", Toast.LENGTH_SHORT).show()
+            })}
+
+        getMessageButton.setOnClickListener { storyIoTHttpConnector.getMessage("98f78a7ab3834babbeb6e73ba911e2f9")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ messageResponse ->
+                Log.e(StoryIoTHttpConnector.TAG, "get message success = ${messageResponse?.id}")
+                Toast.makeText(this, "Get message success = ${messageResponse?.id}", Toast.LENGTH_SHORT).show()
+            }, { t ->
+                t.printStackTrace()
+                Toast.makeText(this, "Get message failure", Toast.LENGTH_SHORT).show()
+            })}
+
+        updateMessageButton.setOnClickListener { storyIoTHttpConnector.updateMetadataMessage("test", Date().toString(), "98f78a7ab3834babbeb6e73ba911e2f9")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ messageResponse ->
+                Log.e(StoryIoTHttpConnector.TAG, "update message success = ${messageResponse?.id}")
+                Toast.makeText(this, "Update message success = ${messageResponse?.id}", Toast.LENGTH_SHORT).show()
+            }, { t ->
+                t.printStackTrace()
+                Toast.makeText(this, "Update message failure", Toast.LENGTH_SHORT).show()
+            })}
+
+        deleteMessageButton.setOnClickListener { storyIoTHttpConnector.deleteMetadataMessage("test",  "98f78a7ab3834babbeb6e73ba911e2f9")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ messageResponse ->
+                Log.e(StoryIoTHttpConnector.TAG, "Delete message success = ${messageResponse?.id}")
+                Toast.makeText(this, "Delete message success = ${messageResponse?.id}", Toast.LENGTH_SHORT).show()
+            }, { t ->
+                t.printStackTrace()
+                Toast.makeText(this, "Delete message failure", Toast.LENGTH_SHORT).show()
+            })}
     }
 
     fun testSmallMessage(): StoryMessage {
