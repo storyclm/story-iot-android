@@ -14,7 +14,7 @@ interface StoryIoTService {
         @Query("signature", encoded = true) signature: String,
         @Body body: RequestBody?,
         @HeaderMap headers: Map<String, String>
-    ): Observable<SmallMessageResponse>
+    ): Observable<MessageResponse>
 
     @POST("/{hub}/publish")
     fun publishLargeMessageFirst(
@@ -23,7 +23,7 @@ interface StoryIoTService {
         @Query("expiration", encoded = true) expiration: String,
         @Query("signature", encoded = true) signature: String,
         @HeaderMap headers: Map<String, String>
-    ): Observable<SmallMessageResponse>
+    ): Observable<MessageResponse>
 
     @PUT
     fun publishLargeMessageSecond(
@@ -40,6 +40,6 @@ interface StoryIoTService {
         @Query("key", encoded = true) key: String?,
         @Query("expiration", encoded = true) expiration: String?,
         @Query("signature", encoded = true) signature: String?
-    ): Observable<ResponseBody>
+    ): Observable<MessageResponse>
 
 }
