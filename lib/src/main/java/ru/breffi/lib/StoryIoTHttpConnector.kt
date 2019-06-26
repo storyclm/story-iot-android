@@ -55,7 +55,7 @@ class StoryIoTHttpConnector(var context: Context? = null) {
         val expiration = "2020-05-28T09:02:49.5754586Z"
     }
 
-    fun publishSmallMessagesWithRetrofit(storyMessage: StoryMessage): Observable<MessageResponse> {
+    fun publishSmallMessage(storyMessage: StoryMessage): Observable<MessageResponse> {
         return storyIoTService.publishSmallMessage(
             hub,
             key,
@@ -66,7 +66,7 @@ class StoryIoTHttpConnector(var context: Context? = null) {
         )
     }
 
-    fun publishLargeMessages(storyMessage: StoryMessage): Observable<MessageResponse> {
+    fun publishLargeMessage(storyMessage: StoryMessage): Observable<MessageResponse> {
         return storyIoTService.publishLargeMessageFirst(
             hub,
             key,

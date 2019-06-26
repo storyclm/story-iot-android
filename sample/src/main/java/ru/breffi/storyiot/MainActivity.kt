@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             .build()
         largeMessageButton.setOnClickListener { selectFile() }
         smallMessageButton.setOnClickListener {
-            storyIoTHttpConnector.publishSmallMessagesWithRetrofit(testSmallMessage())
+            storyIoTHttpConnector.publishSmallMessage(testSmallMessage())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ smallMessageResponse: MessageResponse? ->
@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity() {
                 uri = resultData.data
                 var file = File(PathUtils.getPath(this, uri))
                 Log.e(TAG, "file = ${file.name}, ${file.absolutePath}")
-                val disposable = storyIoTHttpConnector.publishLargeMessages(testLargeMessage(file))
+                val disposable = storyIoTHttpConnector.publishLargeMessage(testLargeMessage(file))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ smallMessageResponse: MessageResponse? ->
