@@ -203,7 +203,7 @@ class StoryIoTHttpConnector(var context: Context? = null) {
             map[StoryHeaders.CUD] = it
         }
         map[StoryHeaders.M] = Build.MODEL
-        map[StoryHeaders.SN] = "need user permission"
+//        map[StoryHeaders.SN] = "need user permission"
         map[StoryHeaders.OS] = "Android"
         map[StoryHeaders.OSV] = Build.VERSION.RELEASE
         map[StoryHeaders.AN] = appName
@@ -213,7 +213,7 @@ class StoryIoTHttpConnector(var context: Context? = null) {
             Locale.getDefault()
         ).format(Date())/*"2020-05-28T09:02:49.5754586"*/
         map[StoryHeaders.TZ] = (TimeZone.getDefault().rawOffset / DateUtils.HOUR_IN_MILLIS).toInt().toString()
-        map[StoryHeaders.GEO] = "need user permission"/*"on;-34.8799074,174.7565664"*/
+        map[StoryHeaders.GEO] = "off"/*"on;-34.8799074,174.7565664"*/
         map[StoryHeaders.NS] = NetworkUtil.getConnectivityStatusString(context)
         map[StoryHeaders.LNG] = Locale.getDefault().language
         return map
