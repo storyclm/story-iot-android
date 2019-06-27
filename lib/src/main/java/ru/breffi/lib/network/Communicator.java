@@ -13,23 +13,23 @@ import java.util.concurrent.TimeUnit;
 
 public final class Communicator {
 
-    private static StoryIoTService authRetrofitService;
+    private static StoryIoTService storyIoTService;
 
     private Communicator() {
 
     }
 
     public static StoryIoTService getStoryIoTService() {
-        if (authRetrofitService == null) {
+        if (storyIoTService == null) {
             OkHttpClient client = initOkHttpClient();
             Gson converter = new GsonBuilder()
                     .excludeFieldsWithoutExposeAnnotation()
                     .create();
             String baseUrl = "https://staging-iot.storychannels.app/";
             Retrofit retrofit = getRetrofit(client, converter, baseUrl);
-            authRetrofitService = retrofit.create(StoryIoTService.class);
+            storyIoTService = retrofit.create(StoryIoTService.class);
         }
-        return authRetrofitService;
+        return storyIoTService;
     }
 
     private static OkHttpClient initOkHttpClient() {
