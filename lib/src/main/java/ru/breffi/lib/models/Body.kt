@@ -1,9 +1,11 @@
 package ru.breffi.lib.models
 
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import com.google.gson.annotations.Expose
 
-open class Body : RealmObject() {
-    @PrimaryKey
-    var id : String? = null
+open class Body {
+    @Expose
+    var id: String? = null
+
+    @Expose
+    var value: String? = null
 }

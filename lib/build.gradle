@@ -2,7 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'realm-android'
+apply plugin: 'com.github.dcendents.android-maven'
+group = 'com.github.storyclm'
 
 android {
     compileSdkVersion 28
