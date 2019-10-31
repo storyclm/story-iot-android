@@ -5,6 +5,7 @@ import android.os.Build
 import android.text.format.DateUtils
 import android.util.Base64
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import io.reactivex.Observable
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -14,36 +15,39 @@ import java.io.File
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
-class StoryIoTHttpConnector(var context: Context? = null) {
-
-    private var gson: Gson = Gson()
-    var appName: String = ""
-    var appVersion: String = ""
-    var smallMessages: ArrayList<StoryMessage>? = null
-    var storyIoTService: StoryIoTService = Communicator.getStoryIoTService()
-
-    data class Builder(var context: Context? = null) {
+class StoryIoTHttpConnector private constructor(
+    private val context: Context,
+    private val gson: Gson,
+    private val storyIoTService: StoryIoTService,
+    private val appName: String,
+    private val appVersion: String
+) {
+    data class Builder(val context: Context) {
 
         private var appName: String? = null
         private var appVersion: String? = null
-        var smallMessages: ArrayList<StoryMessage>? = null
+        private var smallMessages: ArrayList<StoryMessage>? = null
+        private var gson: Gson? = null
 
         fun setAppName(appName: String) = apply { this.appName = appName }
         fun setAppVersion(appVersion: String) = apply { this.appVersion = appVersion }
         fun setSmallMessages(smallMessages: ArrayList<StoryMessage>?) = apply { this.smallMessages = smallMessages }
+        fun setGson(gson: Gson) = apply { this.gson = gson }
 
         fun build(): StoryIoTHttpConnector {
-            val storyIoTHttpConnector = StoryIoTHttpConnector(context)
-            appName?.let {
-                storyIoTHttpConnector.appName = it
-            }
-            appVersion?.let {
-                storyIoTHttpConnector.appVersion = it
-            }
-            storyIoTHttpConnector.smallMessages = smallMessages
-
-            return storyIoTHttpConnector
+            val gson = gson?: GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .create()
+            val storyIoTService = Communicator.getStoryIoTService(gson)
+            return StoryIoTHttpConnector(
+                context,
+                gson,
+                storyIoTService,
+                appName ?: "",
+                appVersion ?: ""
+            )
         }
     }
 

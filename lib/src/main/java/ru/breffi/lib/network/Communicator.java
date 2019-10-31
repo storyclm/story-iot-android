@@ -1,7 +1,6 @@
 package ru.breffi.lib.network;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -19,12 +18,9 @@ public final class Communicator {
 
     }
 
-    public static StoryIoTService getStoryIoTService() {
+    public static StoryIoTService getStoryIoTService(Gson converter) {
         if (storyIoTService == null) {
             OkHttpClient client = initOkHttpClient();
-            Gson converter = new GsonBuilder()
-                    .excludeFieldsWithoutExposeAnnotation()
-                    .create();
             String baseUrl = "https://staging-iot.storychannels.app/";
             Retrofit retrofit = getRetrofit(client, converter, baseUrl);
             storyIoTService = retrofit.create(StoryIoTService.class);
