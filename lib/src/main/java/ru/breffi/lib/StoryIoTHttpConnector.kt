@@ -6,9 +6,11 @@ import android.text.format.DateUtils
 import android.util.Base64
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.internal.bind.util.ISO8601Utils
 import io.reactivex.Observable
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import ru.breffi.lib.models.IoTConfig
 import ru.breffi.lib.models.StoryMessage
 import ru.breffi.lib.network.*
 import java.io.File
@@ -22,9 +24,10 @@ class StoryIoTHttpConnector private constructor(
     private val gson: Gson,
     private val storyIoTService: StoryIoTService,
     private val appName: String,
-    private val appVersion: String
+    private val appVersion: String,
+    private val config: IoTConfig
 ) {
-    data class Builder(val context: Context) {
+    data class Builder(val context: Context, val config: IoTConfig) {
 
         private var appName: String? = null
         private var appVersion: String? = null
@@ -40,42 +43,41 @@ class StoryIoTHttpConnector private constructor(
             val gson = gson?: GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
                 .create()
-            val storyIoTService = Communicator.getStoryIoTService(gson)
+            val storyIoTService = Communicator.getStoryIoTService(gson, config.endpoint)
             return StoryIoTHttpConnector(
                 context,
                 gson,
                 storyIoTService,
                 appName ?: "",
-                appVersion ?: ""
+                appVersion ?: "",
+                config
             )
         }
     }
 
     companion object {
         const val TAG = "StoryIoTHttpConnector"
-        val endpoint = "https://staging-iot.storychannels.app"
-        val hub = "b47bbc659eb344888f9f92ed3261d8dc"
-        val key = "df94b12c3355425eb4efa406f09e8b9f"
-        val expiration = "2020-05-28T09:02:49.5754586Z"
     }
 
     fun publishSmallMessage(storyMessage: StoryMessage): Observable<MessageResponse> {
+        val expiration = getExpiration()
         return storyIoTService.publishSmallMessage(
-            hub,
-            key,
+            config.hub,
+            config.key,
             expiration,
-            Signature.create(key, expiration),
+            buildSignature(config.key, expiration),
             buildBody(storyMessage),
             buildHeaders(storyMessage)
         )
     }
 
     fun publishLargeMessage(storyMessage: StoryMessage): Observable<MessageResponse> {
+        val expiration = getExpiration()
         return storyIoTService.publishLargeMessageFirst(
-            hub,
-            key,
+            config.hub,
+            config.key,
             expiration,
-            Signature.create(key, expiration),
+            buildSignature(config.key, expiration),
             buildHeaders(storyMessage)
         )
             .flatMap { messageResponse ->
@@ -86,22 +88,23 @@ class StoryIoTHttpConnector private constructor(
                 )
                     .flatMap { responseBody ->
                         storyIoTService.confirmLargeMessagePublication(
-                            hub,
+                            config.hub,
                             messageResponse.id,
-                            key,
+                            config.key,
                             expiration,
-                            Signature.create(key, expiration)
+                            buildSignature(config.key, expiration)
                         )
                     }
             }
     }
 
     fun getFeed(token: String?, direction: String, size: Int): Observable<FeedResponse> {
+        val expiration = getExpiration()
         return storyIoTService.getFeed(
-            hub,
-            key,
+            config.hub,
+            config.key,
             expiration,
-            Signature.create(key, expiration),
+            buildSignature(config.key, expiration),
             token,
             direction,
             size
@@ -115,36 +118,51 @@ class StoryIoTHttpConnector private constructor(
     }
 
     fun getMessage(id: String?): Observable<MessageResponse> {
+        val expiration = getExpiration()
         return storyIoTService.getStorageMessage(
-            hub,
+            config.hub,
             id,
-            key,
+            config.key,
             expiration,
-            Signature.create(key, expiration)
+            buildSignature(config.key, expiration)
         )
     }
 
     fun updateMetadataMessage(metaName: String, metaValue: String, id: String): Observable<MessageResponse> {
+        val expiration = getExpiration()
         return storyIoTService.updateMetadataMessage(
-            hub,
+            config.hub,
             id,
             metaName,
-            key,
+            config.key,
             expiration,
-            Signature.create(key, expiration),
+            buildSignature(config.key, expiration),
             buildBody(metaValue)
         )
     }
 
     fun deleteMetadataMessage(metaName: String, id: String): Observable<MessageResponse> {
+        val expiration = getExpiration()
         return storyIoTService.deleteMetadataMessage(
-            hub,
+            config.hub,
             id,
             metaName,
-            key,
+            config.key,
             expiration,
-            Signature.create(key, expiration)
+            buildSignature(config.key, expiration)
         )
+    }
+
+    private fun getExpiration() : String {
+        return ISO8601Utils
+            .format(Date(System.currentTimeMillis() + config.expirationInSeconds * 1000))
+    }
+
+    private fun buildSignature(key: String, expiration: String) : String {
+        return SignatureBuilder(config.privateKey)
+            .addParam("key", key)
+            .addParam("expiration", expiration)
+            .build()
     }
 
     private fun buildBody(smallMessage: StoryMessage): RequestBody {

@@ -1,13 +1,14 @@
 package ru.breffi.lib.network;
 
 import com.google.gson.Gson;
+
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.util.concurrent.TimeUnit;
 
 
 public final class Communicator {
@@ -18,10 +19,9 @@ public final class Communicator {
 
     }
 
-    public static StoryIoTService getStoryIoTService(Gson converter) {
+    public static StoryIoTService getStoryIoTService(Gson converter, String baseUrl) {
         if (storyIoTService == null) {
             OkHttpClient client = initOkHttpClient();
-            String baseUrl = "https://staging-iot.storychannels.app/";
             Retrofit retrofit = getRetrofit(client, converter, baseUrl);
             storyIoTService = retrofit.create(StoryIoTService.class);
         }

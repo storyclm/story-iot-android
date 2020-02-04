@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.breffi.lib.StoryIoTHttpConnector
 import ru.breffi.lib.StoryParams
 import ru.breffi.lib.models.Body
+import ru.breffi.lib.models.IoTConfig
 import ru.breffi.lib.models.StoryMessage
 import ru.breffi.lib.network.FeedResponse
 import ru.breffi.lib.network.MessageResponse
@@ -33,7 +34,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        storyIoTHttpConnector = StoryIoTHttpConnector.Builder(this)
+        val сonfig = IoTConfig(
+            "https://staging-iot.storychannels.app",
+            "b47bbc659eb344888f9f92ed3261d8dc",
+            "df94b12c3355425eb4efa406f09e8b9f",
+            "163af6783ae14d5f829288d1ca44950e"
+        )
+        storyIoTHttpConnector = StoryIoTHttpConnector.Builder(this, сonfig)
             .setAppName(getString(R.string.app_name))
             .setAppVersion(BuildConfig.VERSION_NAME)
             .build()
