@@ -1,14 +1,14 @@
 package ru.breffi.lib.models
 
-class StoryMessage {
+data class MessageData(
     /**
      * EventId. Поле определяет тип события. Должен быть ассоциирован с конкретной моделью. Пример: clm.session.
      */
-    var eventId : String? = null
+    val eventId : String? = null,
     /**
      * UserId. Идентификатор пользователя, если таковой имеется. Пример: 71529FCA-3154-44F5-A462-66323E464F23
      */
-    var userId : String? = null
+    val userId : String? = null,
     /**
      * ct - CorrelationToken. Идентификатор цепочки действий.
      * Если события происходят одно за другим и выстраиваются в цепочку,
@@ -16,21 +16,23 @@ class StoryMessage {
      * и все дочернии события получают его. Так можно отследить
      * последовательность действий от верхнего уровня и ниже. Пример: 96529FCA-6666-44F5-A462-66323E464444.
      */
-    var correlationToken : String? = null
+    val correlationToken : String? = null,
     /**
      * Уникальный идентификатор. Если в теле передается сущность у которой есть уникальный идентификатор
      * (например у сущности сессии есть sessionId), то он записывается в это поле. Пример: “32”
      */
-    var id : String? = null
+    val id : String? = null,
     /**
      * cud - тип операции. Может быть “c” - create, “u” - update, “d” - delete.
      * Если передается сущность над которой выполнили операцию создания,
      * редактирования или удаления то заполняется этот параметр. Пример: “с”
      */
-    var operationType : String? = null
-    var body : Any? = null
+    val operationType : String? = null,
+    val body : Any? = null,
     /**
      * DeviceId. Идентификатор устройства, если поддерживается устройством. Пример: FDF5DA02-419E-465E-ADA6-A26B87097627
      */
-    var deviceId : String? = null
-}
+    val deviceId : String? = null,
+
+    val location : LocationData? = null
+)

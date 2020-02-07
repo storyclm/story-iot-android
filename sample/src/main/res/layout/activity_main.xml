@@ -1,39 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-android:gravity="center">
+        android:layout_height="wrap_content">
 
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:id="@+id/smallMessageButton"
-            android:text="Test small message"
-            android:layout_margin="8dp"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
 
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:id="@+id/largeMessageButton"
-            android:text="Test large message"
-            android:layout_margin="8dp"/>
+        <Button
+                android:id="@+id/smallMessageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Test small message" />
 
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:id="@+id/feedButton"
-            android:text="Get feed"
-            android:layout_margin="8dp"/>
+        <Button
+                android:id="@+id/smallMessageSynchronousButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Test small message synchronous" />
 
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:id="@+id/getMessageButton"
-            android:text="Get message"
-            android:layout_margin="8dp"/>
+        <Button
+                android:id="@+id/largeMessageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Test large message" />
 
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:id="@+id/updateMessageButton"
-            android:text="Update message metadata"
-            android:layout_margin="8dp"/>
+        <Button
+                android:id="@+id/feedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Get feed" />
 
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:id="@+id/deleteMessageButton"
-            android:text="Delete message metadata"
-            android:layout_margin="8dp"/>
+        <Button
+                android:id="@+id/getMessageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Get message" />
 
-</LinearLayout>
+        <Button
+                android:id="@+id/updateMessageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Update message metadata" />
+
+        <Button
+                android:id="@+id/deleteMessageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Delete message metadata" />
+
+    </LinearLayout>
+</ScrollView>
