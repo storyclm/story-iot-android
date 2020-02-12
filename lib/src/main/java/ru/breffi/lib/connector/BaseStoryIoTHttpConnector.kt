@@ -1,7 +1,9 @@
 package ru.breffi.lib.connector
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.provider.Settings
 import android.text.format.DateUtils
 import android.util.Base64
 import com.google.gson.Gson
@@ -81,6 +83,7 @@ open class BaseStoryIoTHttpConnector internal constructor(
         return map
     }
 
+    @SuppressLint("HardwareIds")
     protected fun buildHeaders(smallMessageData: MessageData): HashMap<String, String> {
         val map = HashMap<String, String>()
         smallMessageData.eventId?.let {
@@ -88,9 +91,6 @@ open class BaseStoryIoTHttpConnector internal constructor(
         }
         smallMessageData.userId?.let {
             map[StoryHeaders.UID] = it
-        }
-        smallMessageData.deviceId?.let {
-            map[StoryHeaders.DID] = it
         }
         smallMessageData.correlationToken?.let {
             map[StoryHeaders.CT] = it
@@ -101,14 +101,15 @@ open class BaseStoryIoTHttpConnector internal constructor(
         smallMessageData.operationType?.let {
             map[StoryHeaders.CUD] = it
         }
+        map[StoryHeaders.DID] = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
         map[StoryHeaders.M] = Build.MODEL
 //        map[StoryHeaders.SN] = "need user permission"
         map[StoryHeaders.OS] = "Android"
         map[StoryHeaders.OSV] = Build.VERSION.RELEASE
         map[StoryHeaders.AN] = appName
         map[StoryHeaders.AV] = appVersion
-        map[StoryHeaders.IT] = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS", Locale.getDefault())
-            .format(Date())/*"2020-05-28T09:02:49.5754586"*/
+        map[StoryHeaders.LT] = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS", Locale.getDefault())
+            .format(smallMessageData.created)/*"2020-05-28T09:02:49.5754586"*/
         map[StoryHeaders.TZ] = (TimeZone.getDefault().rawOffset / DateUtils.HOUR_IN_MILLIS).toInt().toString()
         map[StoryHeaders.GEO] = if (smallMessageData.location != null) {
             "on;${smallMessageData.location.lat},${smallMessageData.location.lng}"

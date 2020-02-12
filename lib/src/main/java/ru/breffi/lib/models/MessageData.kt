@@ -1,5 +1,7 @@
 package ru.breffi.lib.models
 
+import java.util.*
+
 data class MessageData(
     /**
      * EventId. Поле определяет тип события. Должен быть ассоциирован с конкретной моделью. Пример: clm.session.
@@ -28,11 +30,10 @@ data class MessageData(
      * редактирования или удаления то заполняется этот параметр. Пример: “с”
      */
     val operationType : String? = null,
-    val body : Any? = null,
-    /**
-     * DeviceId. Идентификатор устройства, если поддерживается устройством. Пример: FDF5DA02-419E-465E-ADA6-A26B87097627
-     */
-    val deviceId : String? = null,
 
-    val location : LocationData? = null
+    val location : LocationData? = null,
+
+    val created: Date? = null,
+
+    val body : Any? = null
 )

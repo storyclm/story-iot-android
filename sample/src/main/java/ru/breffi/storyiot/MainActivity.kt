@@ -143,10 +143,9 @@ class MainActivity : AppCompatActivity() {
         return MessageData(
             eventId = "clm.session",
             userId = "71529FCA-3154-44F5-A462-66323E464F23",
-            correlationToken = "96529FCA-6666-44F5-A462-66323E464444",
             id = "32",
             operationType = "u",
-            deviceId = "96we9FCA-6666-44F5-A462-66323E464444",
+            created = Date(),
             body = body
         )
     }
@@ -155,10 +154,9 @@ class MainActivity : AppCompatActivity() {
         return MessageData(
             eventId = "clm.session",
             userId = "71529FCA-3154-44F5-A462-66323E464F23",
-            correlationToken = "96529FCA-6666-44F5-A462-66323E464444",
             id = "32",
             operationType = "u",
-            deviceId = "96we9FCA-6666-44F5-A462-66323E464444",
+            created = Date(),
             body = file
         )
     }

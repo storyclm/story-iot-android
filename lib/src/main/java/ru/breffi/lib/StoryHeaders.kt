@@ -16,7 +16,7 @@ class StoryHeaders {
         const val OSV = "${PREFIX}osv"
         const val AN = "${PREFIX}an"
         const val AV = "${PREFIX}av"
-        const val IT = "${PREFIX}it"
+        const val LT = "${PREFIX}lt"
         const val TZ = "${PREFIX}tz"
         const val GEO = "${PREFIX}geo"
         const val HIT = "${PREFIX}hit"
