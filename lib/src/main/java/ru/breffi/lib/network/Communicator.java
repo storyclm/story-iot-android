@@ -46,9 +46,9 @@ public final class Communicator {
 
     private static OkHttpClient.Builder getHttpBuilder(HttpLoggingInterceptor interceptor) {
         return new OkHttpClient.Builder()
-                .readTimeout(300, TimeUnit.SECONDS)
-                .connectTimeout(300, TimeUnit.SECONDS)
-                .writeTimeout(300, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .addInterceptor(interceptor);
     }
